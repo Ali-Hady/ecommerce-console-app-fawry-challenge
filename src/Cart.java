@@ -1,3 +1,4 @@
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -80,7 +81,7 @@ public class Cart {
         shippingService.serve(productsToBeShipped);
     }
 
-    public void checkout(Customer customer) throws NotEnoughBalanceException, EmptyCartException {
+    public void checkout(Customer customer) throws NotEnoughBalanceException, EmptyCartException, ProductExpiredException {
         if (products.isEmpty()) {
             throw new EmptyCartException("No products added to cart");
         }
@@ -101,6 +102,14 @@ public class Cart {
 
                 shipmentNotice += quantity + "x " + product.getName() + "\t" + weightDisplay + "\n";
                 totalWeight += weight * quantity;
+            }
+
+            if (product instanceof Expires) {
+                LocalDate curDate =  LocalDate.now();
+                LocalDate expirationDate = ((Expires) product).getExpirationDate();
+                if (expirationDate == null ||  curDate.isAfter(expirationDate)) {
+                    throw new ProductExpiredException("Product is expired");
+                }
             }
 
             double totalPrice = product.getPrice() * quantity;

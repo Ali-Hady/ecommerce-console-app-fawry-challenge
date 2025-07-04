@@ -41,7 +41,7 @@ public class Main {
 
         try {
             cart.checkout(customer);
-        } catch (EmptyCartException | NotEnoughBalanceException e) {
+        } catch (EmptyCartException | NotEnoughBalanceException | ProductExpiredException e) {
             System.out.println("Checkout failed: " + e.getMessage());
         }
 
@@ -50,7 +50,7 @@ public class Main {
 
         try {
             cart.checkout(customer);
-        } catch (EmptyCartException | NotEnoughBalanceException e) {
+        } catch (EmptyCartException | NotEnoughBalanceException | ProductExpiredException e) {
             System.out.println("Expected fail (empty cart): " + e.getMessage());
         }
 
@@ -62,14 +62,14 @@ public class Main {
 
         try {
             cart.checkout(customer);
-        } catch (EmptyCartException | NotEnoughBalanceException e) {
+        } catch (EmptyCartException | NotEnoughBalanceException | ProductExpiredException e) {
             System.out.println("Expected fail (low balance): " + e.getMessage());
         }
 
         try {
             cart.add(cheese, 1);
             cart.checkout(customer);
-        } catch (OutOfStockException | EmptyCartException | NotEnoughBalanceException e) {
+        } catch (OutOfStockException | EmptyCartException | NotEnoughBalanceException | ProductExpiredException e) {
             System.out.println("Second checkout failed: " + e.getMessage());
         }
 
